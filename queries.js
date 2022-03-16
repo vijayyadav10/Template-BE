@@ -16,6 +16,15 @@ const getUsers = (request, response) => {
   })
 }
 
+const getTemplates = (request, response) => {
+  pool.query('SELECT * FROM templates', (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 const getUserById = (request, response) => {
   const id = parseInt(request.params.id)
 
@@ -76,6 +85,7 @@ const deleteUser = (request, response) => {
 
 module.exports = {
   getUsers,
+  getTemplates,
   getUserById,
   createUser,
   updateUser,
