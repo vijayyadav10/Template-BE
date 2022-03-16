@@ -7,15 +7,6 @@ const pool = new Pool({
   port: 5432,
 })
 
-const getUsers = (request, response) => {
-  pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
-
 const getTemplates = (request, response) => {
   pool.query('SELECT * FROM templates', (error, results) => {
     if (error) {
@@ -25,10 +16,10 @@ const getTemplates = (request, response) => {
   })
 }
 
-const getUserById = (request, response) => {
+const getTemplateByTemplateCode = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM templates WHERE Code = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -47,6 +38,26 @@ const createUser = (request, response) => {
     }
     response.status(201).send(`User added with ID: ${results.rows[0].id}`)
   })
+}
+
+const createTemplate = (request, response) => {
+  console.log("response.body",request.body);
+  const { Code, collectionType, description, contentShape } = request.body;
+  /*
+  INSERT INTO templates (Code, collectionType, description, contentShape)
+  VALUES (1001, 'Banner', 'Body section is full of information', '<html><head><title>Title</title></head><body>here the body.</body></html>');
+  */
+
+  pool.query('INSERT INTO templates (Code, collectionType, description, contentShape) VALUES ($1, $2, $3, $4) RETURNING *', [Code, collectionType, description, contentShape], (error, results) => {
+    if (error) {
+      throw error
+    } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
+      throw error
+    }
+    response.status(201).send(`Templates added with ID: ${results.rows[0].Code}`)
+  })
+
+  // console.log('BODY: ',request.body);
 }
 
 const updateUser = (request, response) => {
@@ -84,10 +95,10 @@ const deleteUser = (request, response) => {
 }
 
 module.exports = {
-  getUsers,
   getTemplates,
-  getUserById,
+  getTemplateByTemplateCode,
   createUser,
+  createTemplate,
   updateUser,
   deleteUser,
 }
