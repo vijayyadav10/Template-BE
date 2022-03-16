@@ -18,7 +18,7 @@ app.get('/', (request, response) => {
 app.get('/templates', db.getTemplates)
 app.get('/templates/:id', db.getTemplateByTemplateCode)
 app.post('/templates', db.createTemplate)
-app.put('/users/:id', db.updateUser)
+app.put('/templates/:id', db.updateTemplate)
 app.delete('/templates/:id', db.deleteTemplate)
 
 app.listen(port, () => {

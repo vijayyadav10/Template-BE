@@ -40,13 +40,12 @@ const createTemplate = (request, response) => {
   })
 }
 
-const updateUser = (request, response) => {
+const updateTemplate = (request, response) => {
   const id = parseInt(request.params.id)
-  const { name, email } = request.body
-
+  const { collectionType, description, contentShape } = request.body
   pool.query(
-    'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
-    [name, email, id],
+    'UPDATE templates SET collectionType = $1, description = $2, contentShape = $3 WHERE Code = $4 RETURNING *',
+    [collectionType, description, contentShape, id],
     (error, results) => {
       if (error) {
         throw error
@@ -56,7 +55,7 @@ const updateUser = (request, response) => {
       } else if (Array.isArray(results.rows) && results.rows.length < 1) {
         response.status(404).send(`User not found`);
       } else {
-        response.status(200).send(`User modified with ID: ${results.rows[0].id}`)
+        response.status(200).send(`User modified with ID: ${results.rows[0].code}`)
       }
 
     }
@@ -78,6 +77,6 @@ module.exports = {
   getTemplates,
   getTemplateByTemplateCode,
   createTemplate,
-  updateUser,
   deleteTemplate,
+  updateTemplate,
 }
