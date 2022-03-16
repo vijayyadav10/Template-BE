@@ -17,6 +17,13 @@ CREATE ROLE me WITH LOGIN PASSWORD 'password';
 ALTER ROLE me CREATEDB;
 CREATE DATABASE api;
 GRANT ALL PRIVILEGES ON DATABASE api TO me;
+-- for templates
+CREATE TABLE templates (
+  Code SERIAL PRIMARY KEY,
+  collectionType VARCHAR(30),
+  description VARCHAR(30),
+  contentShape TEXT
+);
 ```
 
 ```bash
