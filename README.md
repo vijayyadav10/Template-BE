@@ -2,8 +2,6 @@
 
 Create, read, update, delete in a Node.js app with an Express server and Postgres database.
 
-### [Read the tutorial](https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/)
-
 ## Database
 
 ```bash
@@ -13,32 +11,17 @@ psql postgres
 ```
 
 ```sql
-CREATE ROLE me WITH LOGIN PASSWORD 'password';
-ALTER ROLE me CREATEDB;
-CREATE DATABASE api;
-GRANT ALL PRIVILEGES ON DATABASE api TO me;
--- for templates
 CREATE TABLE templates (
   Code SERIAL PRIMARY KEY,
   collectionType VARCHAR(30),
-  description VARCHAR(30),
+  description VARCHAR(500),
   contentShape TEXT
 );
-```
 
-```bash
-psql -d api -U me
-```
-
-```sql
-CREATE TABLE users (
-  ID SERIAL PRIMARY KEY,
-  name VARCHAR(30),
-  email VARCHAR(30)
-);
-
-INSERT INTO users (name, email)
-  VALUES ('Jerry', 'jerry@example.com'), ('George', 'george@example.com');
+INSERT INTO templates (Code, collectionType, description, contentShape)
+  VALUES (1001, 'Banner', 'Body section is full of information', '<html><head><title>Title</title></head><body>here the body.</body></html>');
+  
+SELECT * FROM templates;
 ```
 
 ## Installation
@@ -57,10 +40,3 @@ node index.js
 - PUT: `curl -X PUT -d "name=George" -d "email=george@example.com" http://localhost:3000/users/1`
 - DELETE: `curl -X "DELETE" http://localhost:3000/users/1`
 
-## Author
-
-- [Tania Rascia](https://www.taniarascia.com)
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
