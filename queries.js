@@ -19,7 +19,7 @@ const getTemplates = (request, response) => {
 const getTemplateByTemplateCode = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('SELECT * FROM templates WHERE Code = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM templates WHERE code = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -28,9 +28,9 @@ const getTemplateByTemplateCode = (request, response) => {
 }
 
 const createTemplate = (request, response) => {
-  const { Code, collectionType, description, contentShape } = request.body;
+  const { code, collectionType, description, contentShape } = request.body;
 
-  pool.query('INSERT INTO templates (Code, collectionType, description, contentShape) VALUES ($1, $2, $3, $4) RETURNING *', [Code, collectionType, description, contentShape], (error, results) => {
+  pool.query('INSERT INTO templates (code, collectionType, description, contentShape) VALUES ($1, $2, $3, $4) RETURNING *', [code, collectionType, description, contentShape], (error, results) => {
     if (error) {
       throw error
     } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
@@ -44,7 +44,7 @@ const updateTemplate = (request, response) => {
   const id = parseInt(request.params.id)
   const { collectionType, description, contentShape } = request.body
   pool.query(
-    'UPDATE templates SET collectionType = $1, description = $2, contentShape = $3 WHERE Code = $4 RETURNING *',
+    'UPDATE templates SET collectionType = $1, description = $2, contentShape = $3 WHERE code = $4 RETURNING *',
     [collectionType, description, contentShape, id],
     (error, results) => {
       if (error) {
@@ -65,7 +65,7 @@ const updateTemplate = (request, response) => {
 const deleteTemplate = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM templates WHERE Code = $1', [id], (error, results) => {
+  pool.query('DELETE FROM templates WHERE code = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
