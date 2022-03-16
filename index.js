@@ -16,11 +16,10 @@ app.get('/', (request, response) => {
 })
 
 app.get('/templates', db.getTemplates)
-app.get('/templates/:id',db.getTemplateByTemplateCode)
+app.get('/templates/:id', db.getTemplateByTemplateCode)
 app.post('/templates', db.createTemplate)
-app.post('/users', db.createUser)
 app.put('/users/:id', db.updateUser)
-app.delete('/users/:id', db.deleteUser)
+app.delete('/templates/:id', db.deleteTemplate)
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)

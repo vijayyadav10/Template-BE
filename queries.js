@@ -27,19 +27,6 @@ const getTemplateByTemplateCode = (request, response) => {
   })
 }
 
-const createUser = (request, response) => {
-  const { name, email } = request.body
-
-  pool.query('INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *', [name, email], (error, results) => {
-    if (error) {
-      throw error
-    } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
-      throw error
-    }
-    response.status(201).send(`User added with ID: ${results.rows[0].id}`)
-  })
-}
-
 const createTemplate = (request, response) => {
   const { Code, collectionType, description, contentShape } = request.body;
 
@@ -76,10 +63,10 @@ const updateUser = (request, response) => {
   )
 }
 
-const deleteUser = (request, response) => {
+const deleteTemplate = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM templates WHERE Code = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -90,8 +77,7 @@ const deleteUser = (request, response) => {
 module.exports = {
   getTemplates,
   getTemplateByTemplateCode,
-  createUser,
   createTemplate,
   updateUser,
-  deleteUser,
+  deleteTemplate,
 }
