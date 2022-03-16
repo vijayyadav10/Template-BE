@@ -34,19 +34,14 @@ const createUser = (request, response) => {
     if (error) {
       throw error
     } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
-    	throw error
+      throw error
     }
     response.status(201).send(`User added with ID: ${results.rows[0].id}`)
   })
 }
 
 const createTemplate = (request, response) => {
-  console.log("response.body",request.body);
   const { Code, collectionType, description, contentShape } = request.body;
-  /*
-  INSERT INTO templates (Code, collectionType, description, contentShape)
-  VALUES (1001, 'Banner', 'Body section is full of information', '<html><head><title>Title</title></head><body>here the body.</body></html>');
-  */
 
   pool.query('INSERT INTO templates (Code, collectionType, description, contentShape) VALUES ($1, $2, $3, $4) RETURNING *', [Code, collectionType, description, contentShape], (error, results) => {
     if (error) {
@@ -54,10 +49,8 @@ const createTemplate = (request, response) => {
     } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
       throw error
     }
-    response.status(201).send(`Templates added with ID: ${results.rows[0].Code}`)
+    response.status(201).send(`Templates added with ID: ${results.rows[0].code}`)
   })
-
-  // console.log('BODY: ',request.body);
 }
 
 const updateUser = (request, response) => {
@@ -70,15 +63,15 @@ const updateUser = (request, response) => {
     (error, results) => {
       if (error) {
         throw error
-      } 
-      if (typeof results.rows == 'undefined') {
-      	response.status(404).send(`Resource not found`);
-      } else if (Array.isArray(results.rows) && results.rows.length < 1) {
-      	response.status(404).send(`User not found`);
-      } else {
-  	 	  response.status(200).send(`User modified with ID: ${results.rows[0].id}`)         	
       }
-      
+      if (typeof results.rows == 'undefined') {
+        response.status(404).send(`Resource not found`);
+      } else if (Array.isArray(results.rows) && results.rows.length < 1) {
+        response.status(404).send(`User not found`);
+      } else {
+        response.status(200).send(`User modified with ID: ${results.rows[0].id}`)
+      }
+
     }
   )
 }
