@@ -30,6 +30,8 @@ app.get('/', (request, response) => {
 
 app.get('/api/templates', db.getTemplates)
 app.get('/api/templates/:id', db.getTemplateByTemplateCode)
+// TODO: need to refactor/improve the code of query param
+app.get('/api/templates/searchby/:searchTerm/:data', db.getByCodeOrName)
 app.post('/api/templates', db.createTemplate)
 app.put('/api/templates/:id', db.updateTemplate)
 app.delete('/api/templates/:id', db.deleteTemplate)

@@ -27,6 +27,30 @@ const getTemplateByTemplateCode = (request, response) => {
   })
 }
 
+// http://localhost:8082/api/templates/searchby/description/h
+// http://localhost:8082/api/templates/searchby/code/1002
+// TODO: need to refactor/improve the code
+const getByCodeOrName = (request, response) => {
+  const searchBy = request.params.searchTerm.toLowerCase();
+  let data = request.params.data;
+  if (searchBy === 'code') {
+    data = parseInt(data);
+    pool.query('SELECT * FROM templates WHERE code = $1', [data], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+    return;
+  }
+  pool.query(`SELECT * FROM templates WHERE ${searchBy} ILIKE '%${data}%'`, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 const createTemplate = (request, response) => {
   const { code, collectionType, description, contentShape } = request.body;
 
@@ -76,7 +100,8 @@ const deleteTemplate = (request, response) => {
 module.exports = {
   getTemplates,
   getTemplateByTemplateCode,
+  getByCodeOrName,
   createTemplate,
   deleteTemplate,
-  updateTemplate,
+  updateTemplate
 }
