@@ -16,6 +16,20 @@ const getTemplates = (request, response) => {
   })
 }
 
+// GET COLLECTIONTYPE
+// SELECT collectiontype FROM public.templates;
+
+const getCollectionType = (request, response) => {
+
+  pool.query('SELECT code, collectiontype FROM templates', (error, results) => {
+    if (error) {
+      console.log('ERROR COMMING')
+      throw error;
+    }
+    response.status(200).json(results.rows.map(el => el))
+  })
+}
+
 const getTemplateByTemplateCode = (request, response) => {
   const id = parseInt(request.params.id)
 
@@ -100,6 +114,7 @@ const deleteTemplate = (request, response) => {
 module.exports = {
   getTemplates,
   getTemplateByTemplateCode,
+  getCollectionType,
   getByCodeOrName,
   createTemplate,
   deleteTemplate,
