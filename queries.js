@@ -41,7 +41,7 @@ const getTemplateByTemplateCode = (request, response) => {
   })
 }
 
-// http://localhost:8082/api/templates/searchby/description/h
+// http://localhost:8082/api/templates/searchby/templateName/h
 // http://localhost:8082/api/templates/searchby/code/1002
 // TODO: need to refactor/improve the code
 const getByCodeOrName = (request, response) => {
@@ -66,9 +66,9 @@ const getByCodeOrName = (request, response) => {
 }
 
 const createTemplate = (request, response) => {
-  const { code, collectionType, description, contentShape } = request.body;
+  const { collectionType, templateName, contentShape } = request.body;
 
-  pool.query('INSERT INTO templates (code, collectionType, description, contentShape) VALUES ($1, $2, $3, $4) RETURNING *', [code, collectionType, description, contentShape], (error, results) => {
+  pool.query('INSERT INTO templates (collectionType, templateName, contentShape) VALUES ($1, $2, $3) RETURNING *', [collectionType, templateName, contentShape], (error, results) => {
     if (error) {
       throw error
     } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
@@ -80,10 +80,10 @@ const createTemplate = (request, response) => {
 
 const updateTemplate = (request, response) => {
   const id = parseInt(request.params.id)
-  const { collectionType, description, contentShape } = request.body
+  const { collectionType, templateName, contentShape } = request.body
   pool.query(
-    'UPDATE templates SET collectionType = $1, description = $2, contentShape = $3 WHERE code = $4 RETURNING *',
-    [collectionType, description, contentShape, id],
+    'UPDATE templates SET collectionType = $1, templateName = $2, contentShape = $3 WHERE code = $4 RETURNING *',
+    [collectionType, templateName, contentShape, id],
     (error, results) => {
       if (error) {
         throw error
